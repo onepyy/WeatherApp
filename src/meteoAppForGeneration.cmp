@@ -1,0 +1,50 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <!-- ATTRIBUTI -->
+    <aura:attribute name="cityName" type="String"/>
+    <aura:attribute name="weather" type="Object"/>
+    <aura:attribute name="error" type="String"/>
+    <aura:attribute name="hasSearched" type="Boolean" default="false"/>
+
+    <!-- INIT -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <lightning:card title="Meteo città">
+        <div class="slds-p-around_medium">
+
+            <lightning:input 
+                label="Inserisci città"
+                value="{!v.cityName}"
+                onkeyup="{!c.handleKeyUp}" />
+
+            <lightning:button 
+                label="Cerca"
+                variant="brand"
+                onclick="{!c.handleSearch}"
+                class="slds-m-top_small"/>
+
+            <!-- RISULTATI -->
+            <aura:if isTrue="{!not(empty(v.weather))}">
+                <div class="slds-m-top_medium">
+                    <p><strong>📍 Città: </strong> {!v.weather.name}</p>
+                    <p><strong>🌡️ Temperatura: </strong> {!v.weather.temperature} °C</p>
+                    <p><strong>☁️ Condizioni: </strong> {!v.weather.description}</p>
+
+                    <hr/>
+
+                    <p><strong>💧 Umidità: </strong> {!v.weather.humidity} %</p>
+                    <p><strong>💨 Vento: </strong> {!v.weather.windSpeed} km/h</p>
+                    <p><strong>🌧️ Precipitazioni: </strong> {!v.weather.precipitation} mm</p>
+                </div>
+            </aura:if>
+
+            <!-- ERROR -->
+            <aura:if isTrue="{!and(v.hasSearched, not(empty(v.error)))}">
+                <div class="slds-text-color_error slds-m-top_medium">
+                    {!v.error}
+                </div>
+			</aura:if>
+
+        </div>
+    </lightning:card>
+</aura:component>
